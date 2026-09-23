@@ -275,7 +275,8 @@ BRANCHES = [
 # ─────────────────────────── GEMINI SETUP ──────────────────────
 
 def configure_gemini(api_key: str):
-    genai.configure(api_key="AIzaSyC-6OqXApfO0Ugrb10HdLDRfgtYuLKL0Sw")
+    key = api_key or os.getenv("GEMINI_API_KEY") or os.getenv("api_key")
+    genai.configure(api_key=key)
     return genai.GenerativeModel("gemini-2.5-flash-lite")
 
 
@@ -595,7 +596,7 @@ def render_analytics(colleges: list):
 def render_sidebar() -> dict:
     with st.sidebar:
         # Load from .env first, fallback to sidebar input
-        env_key = os.getenv("api_key", "")
+        env_key = os.getenv("GEMINI_API_KEY") or os.getenv("api_key", "")
         if env_key:
             api_key = env_key
             st.success("✅ API Key loaded from .env")
